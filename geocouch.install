@@ -1,0 +1,18 @@
+couchtests=/usr/share/couchdb/www/script/couch_tests.js
+jsfiles=('spatial.js'
+         'list_spatial.js'
+         'etags_spatial.js'
+         'multiple_spatial_rows.js'
+         'spatial_compaction.js'
+         'spatial_design_docs.js'
+         'spatial_bugfixes.js')
+
+post_install() {
+  for f in ${jsfiles[@]}; do echo "loadTest('$f');" >> $couchtests; done
+  echo 'Seven geospatial tests have been appended to /usr/share/couchdb/www/script/couch_tests.js.'
+  echo 'They should appear at the bottom of the "Test Suite" list in Futon.'
+}
+
+post_remove() {
+  for f in ${jsfiles[@]}; do sed -i "/$f/d" $couchtests; done
+}
